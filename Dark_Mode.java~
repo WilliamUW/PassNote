@@ -1,0 +1,222 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.awt.image.*;
+import javax.imageio.*;
+import java.io.File;
+import java.net.URL;
+import java.io.*;
+import javax.swing.border.*;
+/**
+ * Write a description of class Dark_Mode here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+public class Dark_Mode extends Interface
+{
+    // instance variables - replace the example below with your own
+    final Color BACKGROUND_COLOR = Color.GRAY;
+    final Color OPTION_BACKGROUND = Color.DARK_GRAY;
+    final Color ACCOUNT_BACKGROUND = Color.BLACK;
+    final Color TEXT_FOREGROUND = Color.WHITE;
+
+    /**
+     * Constructor for objects of class Dark_Mode
+     */
+    public Dark_Mode()
+    {
+        super();
+    }
+
+    
+    public void accountButton()
+    {
+        // initialise instance variables
+        addAccountFrame = new JFrame();
+        websiteTextField = new JTextField("website");
+        JLabel websiteLabel = new JLabel("Website:");
+        websiteTextField.addActionListener(this);
+        usernameTextField = new JTextField("username");
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameTextField.addActionListener(this);
+        passwordTextField = new JTextField("password");
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordTextField.addActionListener(this);
+
+        JPanel panel = new JPanel();
+        save = new JButton("Save");
+        save.addActionListener(this);
+        save.setMnemonic(KeyEvent.VK_ENTER);
+
+        panel.setLayout(new GridLayout(7,1));
+        panel.setPreferredSize(new Dimension(300,400));
+        panel.add(websiteLabel);
+        panel.add(websiteTextField);
+        panel.add(usernameLabel);
+        panel.add(usernameTextField);
+        panel.add(passwordLabel);
+        panel.add(passwordTextField);
+        panel.add(save);
+        addAccountFrame.add(panel);
+
+        // addAccountFrame.add(save);
+        pack(addAccountFrame);
+        addAccountFrame.setVisible(false);
+    }
+
+    public void displayJFrame() 
+    {
+        // put your code here
+        frame = new JFrame("I am a JFrame");
+        // optionPanel.addOptionPanel();
+        addOptionPanel();
+        // display user accounts
+        displayUser(user);
+
+        packMainFrame();
+    }
+
+    public void addOptionPanel()
+    {
+        // get option panel
+        option = new JPanel();
+        option.setLayout(new BorderLayout());
+
+        JPanel right = new JPanel(new FlowLayout());
+        JPanel left = new JPanel(new FlowLayout());
+
+        JMenuBar fileBar = new JMenuBar();
+        JMenu menu = new JMenu("Files");
+        fileBar.add(menu);
+
+        JMenuBar acc = new JMenuBar();
+        JMenu accounts = new JMenu("Accounts");
+        fileBar.add(accounts);
+
+        JMenuBar userBar = new JMenuBar();
+        JMenu userMenu = new JMenu("User");
+        fileBar.add(userMenu);
+
+        //add menu bar to jpanel
+        left.add(fileBar);
+
+        changeName = new JButton("Change Name");
+        changeName.addActionListener(this);
+        userMenu.add(changeName);
+
+        changePassword = new JButton("Change Password");
+        changePassword.addActionListener(this);
+        userMenu.add(changePassword);
+
+        lock = new JButton("Lock");
+        lock.addActionListener(this);
+        userMenu.add(lock);
+
+        saveFile = new JButton("Save");
+        saveFile.addActionListener(this);
+        menu.add(saveFile);
+
+        readFile = new JButton("Open");
+        readFile.addActionListener(this);
+        menu.add(readFile);
+
+        btnSave = new JButton("Save As"); 
+        btnSave.addActionListener(this);
+        menu.add(btnSave);
+
+        btnOpen = new JButton("Open As");
+        btnOpen.addActionListener(this);
+        menu.add(btnOpen);
+
+        optionLabel = new JLabel();
+        optionLabel.setForeground(TEXT_FOREGROUND);
+        refreshOptionLabel();
+        // add option label to option panel
+        option.add(optionLabel, BorderLayout.CENTER);
+        // set option panel background color
+        option.setBackground(OPTION_BACKGROUND);
+
+        // get add account button
+        addAccount = new JButton("+");
+        add = new JButton("Add Account");
+        addAccount.addActionListener(this);
+        add.addActionListener(this);
+        addAccount.addActionListener(this);
+        accounts.add(add);
+
+        // get edit account button
+        editAccount = new JButton("Edit Accounts");
+        editMenuButton = new JButton("Edit");
+        editAccount.addActionListener(this);
+        editMenuButton.addActionListener(this);
+        accounts.add(editAccount);
+
+        undoButton = new JButton("Undo Button");
+        undoButton.addActionListener(this);
+        accounts.add(undoButton);
+
+        // get refresh button
+        refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(this);
+
+        right.add(refreshButton);
+        right.add(editMenuButton);
+        right.add(addAccount);
+
+        option.add(left,BorderLayout.WEST);
+        option.add(right, BorderLayout.EAST);
+
+        left.setBackground(OPTION_BACKGROUND);
+        right.setBackground(OPTION_BACKGROUND);
+
+        frame.add(option, BorderLayout.NORTH);
+    }
+
+    public void displayUser(User user)
+    {
+        // initialize JFrame
+        // frame = new JFrame("I am a JFrame");
+        // add option
+        // addOptionPanel();
+        // initialize accounts panel
+        accounts = new JPanel();
+        displayAccounts();
+
+    }
+    public JPanel displayAccounts()
+    {
+        accounts = new JPanel();
+        accounts.setBackground(BACKGROUND_COLOR);
+        for(int i = 0; i < user.getNumberOfAccounts(); i++)
+        {
+            accounts.add(getAccountPanel(user.getAccount(i)));
+        }
+        return accounts;
+    }
+
+    public JPanel getAccountPanel(Account acc)
+    {
+        Container p = super.getAccountPanel(acc);
+        p.setBackground(ACCOUNT_BACKGROUND);
+        p.setForeground(Color.white);
+        return p;
+    }
+
+    public void packMainFrame()
+    {
+        super.packMainFrame();
+        frame.getContentPane().setForeground(TEXT_FOREGROUND);
+        frame.getContentPane().setBackground(Color.black);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    public void refreshOptionLabel()
+    {
+        super.refreshOptionLabel();
+        optionLabel.setForeground(Color.white);
+    }
+
+}
