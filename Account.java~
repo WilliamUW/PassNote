@@ -77,7 +77,7 @@ public class Account extends Profile
         super.editAccount(website, username, password);
         // change image;
         this.icon = autoIcon();
-        // test for change in width from editing
+        //
         testWidth();
     }
 

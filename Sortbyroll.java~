@@ -1,0 +1,18 @@
+
+import java.io.*;
+import java.util.*;
+/**
+ * Write a description of class SortbyRoll here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+public class Sortbyroll implements Comparator<Account> 
+{ 
+    // Used for sorting in ascending order of 
+    // roll number 
+    public int compare(Account a, Account b) 
+    { 
+        return a.rollno - b.rollno; 
+    } 
+} 

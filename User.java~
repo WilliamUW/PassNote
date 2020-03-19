@@ -1,5 +1,4 @@
 import java.util.*;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.*;
@@ -170,7 +169,59 @@ public class User
         }
     }
 
+    public void sortByWebsite()
+    {
+        List<Account> accountsList = accounts;
 
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getWebsite().compareTo(o2.getWebsite());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
+    
+    public void sortByUsername()
+    {
+        List<Account> accountsList = accounts;
+
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getUsername().compareTo(o2.getUsername());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
+    
+    public void sortByPasswordWebsite()
+    {
+        List<Account> accountsList = accounts;
+
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getPassword().compareTo(o2.getPassword());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
 
     public boolean isVisible()
     {

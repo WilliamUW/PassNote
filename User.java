@@ -1,5 +1,4 @@
 import java.util.*;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.*;
@@ -144,19 +143,20 @@ public class User
         accounts.remove(account);
     }
 
+    public ArrayList<Account> getAccounts()
+    {
+        return accounts;
+    }
+
     public void saveUndo(Account account)
     {
         lastRemoved = account;
         lastRemovedIndex = accounts.indexOf(account);
     }
 
-    public ArrayList<Account> getAccounts()
-    {
-        return accounts;
-    }
-
     public boolean undo()
     {
+	// last removed account exists 
         if(lastRemoved != null)
         {
             accounts.add(lastRemovedIndex, lastRemoved);
@@ -166,11 +166,64 @@ public class User
         }
         else
         {
+	    // no previous account deleted
             return false;
         }
     }
 
+    public void sortByWebsite()
+    {
+        List<Account> accountsList = accounts;
 
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getWebsite().compareTo(o2.getWebsite());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
+    
+    public void sortByUsername()
+    {
+        List<Account> accountsList = accounts;
+
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getUsername().compareTo(o2.getUsername());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
+    
+    public void sortByPassword()
+    {
+        List<Account> accountsList = accounts;
+
+        Collections.sort(accountsList, new Comparator<Account>(){
+
+                public int compare(Account o1, Account o2)
+                {
+                    return o1.getPassword().compareTo(o2.getPassword());
+                }
+            });
+            
+        accounts = new ArrayList<Account>();
+        for(int i =0; i < accountsList.size(); i++)
+            accounts.add(accountsList.get(i));
+            
+    }
 
     public boolean isVisible()
     {

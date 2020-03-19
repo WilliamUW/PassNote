@@ -1,0 +1,15 @@
+
+import java.io.*;
+import java.util.*;
+/**
+ * Write a description of class lol here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+public class lol
+{
+    public static void main(String[] args) {
+
+    }
+}

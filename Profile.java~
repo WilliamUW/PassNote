@@ -8,7 +8,7 @@
 public class Profile
 {
     // instance variables - replace the example below with your own
-    private String website;
+    
     private String username;
     private String password;
     
