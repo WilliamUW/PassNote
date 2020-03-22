@@ -78,18 +78,16 @@ public class NewUser implements ActionListener
 
         if(e.getSource() == start)
         {
-
             JFrame f = new JFrame();
             String name=JOptionPane.showInputDialog(f,"Enter Name");  
             frame.setVisible(false);
              JOptionPane.showMessageDialog(frame,
-                    "Welcome " + name + " :))");
+                    name + ", Welcome to Passnote!");
             if(name.equals(""))
             {
-                name = "unnamed user. You can change your name under the User Menu :)";
+                name = "Unnamed User";
             }
             i = new Interface(name);
-           
         }
     }
 

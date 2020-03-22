@@ -2,7 +2,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 /**
- * Write a description of class Main here.
+ * Allows for selection of file through JFileChooser.
  *
  * @author William Wang
  * @version 1.0 2019.02.11
@@ -24,9 +24,9 @@ public class FileChooser {
         int returnValue = jfc.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // if a file has been selected
             File selectedFile = jfc.getSelectedFile();
             path = selectedFile.getAbsolutePath();
-            // System.out.println(path);
             return path;
         }
         return "";

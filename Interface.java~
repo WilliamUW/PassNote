@@ -19,7 +19,7 @@ public class Interface implements ActionListener
 {
     // constants
     final String[] HEADERS = {"Website: ","Username: ","Password: "};
-    final String FRAME_NAME = "Your Very Own Offline Password Manager";
+    final String FRAME_NAME = "Passnote: Your Very Own Offline Password Manager";
     final Color BACKGROUND_COLOR = Color.cyan;
     final Color OPTION_BACKGROUND = Color.green;
     final Color ACCOUNT_BACKGROUND = Color.yellow;
@@ -222,10 +222,12 @@ public class Interface implements ActionListener
         catch(FileNotFoundException e)
         {
             // exception handling
+            System.out.println("File Selection Error");
         }
         catch(IOException e)
         {
             // exception handling
+            System.out.println("Input Output Error");
         }
         refresh();
     }
@@ -257,14 +259,6 @@ public class Interface implements ActionListener
     public void refreshOptionLabel()
     {
         String n = user.getName();
-        if(n.equals("unnamed user"))
-        {
-            n = n + "; Please click the change name item to input a name. :)";
-        }
-        else
-        {
-
-        }
         optionLabel.setText("Name: " + n + " | Number Of Accounts: " + user.getNumberOfAccounts());
     }
 
@@ -292,10 +286,8 @@ public class Interface implements ActionListener
         JLabel image = new JLabel(acc.getIcon(), JLabel.CENTER);
         JLabel[] array = new JLabel[3];
         JPanel text = new JPanel();
-        //text.setLayout(new BoxLayout(text, BoxLayout.Y_AXIS));
-
+        // default dimensions
         account.setPreferredSize(new Dimension(150, 150));
-
         image.setBackground(ACCOUNT_BACKGROUND);
         account.add(image);
 
@@ -307,6 +299,7 @@ public class Interface implements ActionListener
             account.add(array[i]);
         }
         account.setBackground(ACCOUNT_BACKGROUND);
+        // check whether width exceeds the default width, if not, the default dimensions remains
         account.setPreferredSize(new Dimension(acc.getWidth(), 150));
         return account;
     }
@@ -366,20 +359,23 @@ public class Interface implements ActionListener
     public JPanel noAccounts()
     {
         JPanel empty = new JPanel();
-        JLabel n = new JLabel("Welcome!");
+        JLabel n = new JLabel("Welcome, " + user.getName() );
         n.setPreferredSize(new Dimension(800, 100));
         n.setHorizontalAlignment(JLabel.CENTER);
         JLabel a = new JLabel("You do not currently have any accounts stored on this user.");
         JLabel b = new JLabel("Click on the Open As menu option and select the sample.txt to add some sample accounts.");
         JLabel c = new JLabel("Click on the + or Add Account button to add your own accounts.");
+        JLabel d = new JLabel("Click on the Settings button to access the Help button below for assistance.");
         n.setFont(new Font("Serif", Font.PLAIN, 40));
         a.setFont(new Font("Serif", Font.PLAIN, 30));
         b.setFont(new Font("Serif", Font.PLAIN, 20));
         c.setFont(new Font("Serif", Font.PLAIN, 20));
+        d.setFont(new Font("Serif", Font.PLAIN, 20));
         empty.add(n);
         empty.add(a);
         empty.add(b);
         empty.add(c);
+        empty.add(d);
         empty.setBackground(BACKGROUND_COLOR);
         return empty;
     }
@@ -399,6 +395,7 @@ public class Interface implements ActionListener
 
         if(e.getSource() == addAccount || e.getSource() == add)
         {
+
             JTextField websiteField = new JTextField(10);
             JTextField usernameField = new JTextField(10);
             JTextField password = new JTextField(10);

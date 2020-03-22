@@ -8,14 +8,14 @@ import java.net.URL;
 import java.io.*;
 import javax.swing.border.*;
 /**
- * Write a description of class User here.
+ * User of the Password Manager application
  *
  * @author William Wang
  * @version (a version number or a date)
  */
 public class User
 {
-    // instance variables - replace the example below with your own
+    // instance variables for the User class
     private String name;
     private ArrayList<Account> accounts = new ArrayList<Account>();
     private Account lastRemoved;
@@ -52,7 +52,7 @@ public class User
     /**
      * Return this user's name
      *
-     * @return    this user's name
+     * @return  this user's name
      */
     public String getName()
     {
@@ -61,10 +61,9 @@ public class User
     }
 
     /**
-     * An example of a method - replace this comment with your own
+     * Add an account with the specified values
      *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
+     * @param  website  username    password
      */
     public void addAccount(String website, String username, String password)
     {
@@ -156,7 +155,7 @@ public class User
 
     public boolean undo()
     {
-	// last removed account exists 
+    // last removed account exists 
         if(lastRemoved != null)
         {
             accounts.add(lastRemovedIndex, lastRemoved);
@@ -166,24 +165,27 @@ public class User
         }
         else
         {
-	    // no previous account deleted
+        // no previous account deleted
             return false;
         }
     }
 
     public void sortByWebsite()
     {
+    // convert ArrayList into List of accounts
         List<Account> accountsList = accounts;
-
-        Collections.sort(accountsList, new Comparator<Account>(){
-
+    
+    // sort with specified Comparator
+        Collections.sort(accountsList, new Comparator<Account>()
+        {
                 public int compare(Account o1, Account o2)
                 {
                     return o1.getWebsite().compareTo(o2.getWebsite());
                 }
             });
-            
+        // reset ArrayList of user accounts 
         accounts = new ArrayList<Account>();
+    // insert the sorted accounts in order
         for(int i =0; i < accountsList.size(); i++)
             accounts.add(accountsList.get(i));
             
