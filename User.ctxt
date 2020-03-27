@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=User
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ User\ here.\r\n\r\n\ @author\ William\ Wang\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ User\ of\ the\ Password\ Manager\ application\r\n\r\n\ @author\ William\ Wang\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
 comment1.params=
 comment1.target=User()
 comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ User\r\n

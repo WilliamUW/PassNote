@@ -1,19 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.awt.image.*;
-import javax.imageio.*;
-import java.io.File;
-import java.net.URL;
 import java.io.*;
 import javax.swing.border.*;
-import java.util.concurrent.TimeUnit;
+import javax.swing.JFileChooser;
 
 /**
- * Write a description of class Interface here.
+ * The main interface and overview window for the application.
  *
  * @author William Wang
- * @version (a version number or a date)
+ * @version 3.1
  */
 public class Interface implements ActionListener
 {
@@ -23,19 +19,16 @@ public class Interface implements ActionListener
     final Color BACKGROUND_COLOR = Color.cyan;
     final Color OPTION_BACKGROUND = Color.green;
     final Color ACCOUNT_BACKGROUND = Color.yellow;
-    final String HELP_INFO = "Help";
+    final String n = System.getProperty("line.separator");
+    final String HELP_INFO = "Helpful Information: " + n + "Click on the Open As menu option and select the sample.txt to add some sample accounts" + n + "Click on the + or Add Account button to add your own accounts" + n + "Click on the Edit Account button to edit your accounts" + n + "You can change the display name by clicking “Change Name”" + n + "You can set or modify the password for the application by clicking “Change Password”, which you can use to lock the application." + n + "Click the various Sorting buttons to systematically arrange your accounts according to the variable you have chosen.";
 
-    // instance variables - replace the example below with your own
+    // instance variables
     JFrame frame;
-
     User user;
-
     JPanel accounts;
     JPanel account;
-
     JFrame settings;
     JButton settingsButton;
-
     JPanel option;
     JLabel optionLabel;
     JButton addAccount;
@@ -52,34 +45,27 @@ public class Interface implements ActionListener
     JButton sortByUsernameButton;
     JButton sortByPasswordButton;
     JButton helpButton;
-
+    JButton sampleButton;
     JTextField websiteTextField, usernameTextField, passwordTextField;
     JButton save;
     JFrame addAccountFrame;
-
     JFrame editAccountFrame;
     JFrame editFrame;
-
     boolean editResult;
     JOptionPane pane;
-
     JPanel editPanel;
     JButton editButton;
     JPanel editOptionPanel;
     JButton backButton;
     JButton undo;
     JButton lock;
-
-    JButton saveFile;
-    JButton readFile;
-
     JButton btnSave, btnOpen;
     String fileName = "Files\\sample.txt";
     String defaultPath = System.getProperty("user.dir") + File.separator + fileName;
     String lastPath = null;
 
     /**
-     * Constructor for objects of class Display
+     * Constructor for objects of class Interface
      */
     public Interface()
     {
@@ -88,7 +74,7 @@ public class Interface implements ActionListener
     }
 
     /**
-     * Constructor for objects of class Display
+     * Constructor for objects of class Interface
      */
     public Interface(User user)
     {
@@ -97,7 +83,7 @@ public class Interface implements ActionListener
     }
 
     /**
-     * Constructor for objects of class Display
+     * Constructor for objects of class Interface
      */
     public Interface(String name)
     {
@@ -107,6 +93,7 @@ public class Interface implements ActionListener
 
     public JFrame getFrame()
     {
+        // return the main interface frame
         return frame;
     }
 
@@ -126,39 +113,32 @@ public class Interface implements ActionListener
         // get add account button
         addAccount = new JButton("+");
         addAccount.addActionListener(this);
-
         editMenuButton = new JButton("Edit");
         editMenuButton.addActionListener(this);
-
         sortButton = new JButton("Sort");
         sortButton.addActionListener(this);
-
         optionLabel = new JLabel();
         // add option label to option panel
         option.add(optionLabel, BorderLayout.CENTER);
         // set option panel background color
         option.setBackground(OPTION_BACKGROUND);
         refreshOptionLabel();
-
         // get refresh button
         refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(this);
-
         quitProgram = new JButton("Quit");
         quitProgram.addActionListener(this);
-
+        // add buttons to right panel
         right.add(quitProgram);
         right.add(refreshButton);
         right.add(editMenuButton);
         right.add(addAccount);
         right.add(sortButton);
-
+        // add left and right panel to optionPanel
         option.add(left, BorderLayout.WEST);
         option.add(right, BorderLayout.EAST);
-
         left.setBackground(OPTION_BACKGROUND);
         right.setBackground(OPTION_BACKGROUND);
-
         frame.add(option, BorderLayout.NORTH);
     }
 
@@ -166,23 +146,20 @@ public class Interface implements ActionListener
     {
         String absolutePath = path;
         String print = "";
-        // write the content in file
+        // export the saved accounts to text file
         try
-        (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(absolutePath)))
+        (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(absolutePath+".txt")))
         {
             for(int i = 0; i < user.getNumberOfAccounts(); i++)
             {
-                print = user.getAccount(i).toPrint() + "\n\n";
-                System.out.println(print);
                 bufferedWriter.write(user.getAccount(i).toPrint());
-                bufferedWriter.write("\n\n");
             }
             bufferedWriter.close();
         }
         catch(IOException e)
         {
             // exception handling
-            System.out.println("Input Output Error");
+            JOptionPane.showMessageDialog(frame,"Input Output Error. Please try again.");
         }
     }
 
@@ -222,75 +199,69 @@ public class Interface implements ActionListener
         catch(FileNotFoundException e)
         {
             // exception handling
-            System.out.println("File Selection Error");
+            JOptionPane.showMessageDialog(frame,"File Selection Error");
         }
         catch(IOException e)
         {
             // exception handling
-            System.out.println("Input Output Error");
+            JOptionPane.showMessageDialog(frame,"Input Output Error");
         }
         refresh();
     }
 
     /**
      * Display the JFrame
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
      */
     public void displayJFrame()
     {
-        // put your code here
+        // create JFrame with specified frame name
         frame = new JFrame(FRAME_NAME);
-        // optionPanel.addOptionPanel();
+        // add Option Panel
         addOptionPanel();
-        // display user accounts
-        displayUser(user);
-
-        packMainFrame();
-    }
-
-    public void displayUser(User user)
-    {
+        // initialize accounts JPanel
         accounts = new JPanel();
-        displayAccounts();
+        // pack frame and display user accounts
+        packMainFrame();
     }
 
     public void refreshOptionLabel()
     {
-        String n = user.getName();
-        optionLabel.setText("Name: " + n + " | Number Of Accounts: " + user.getNumberOfAccounts());
+        // display the updated user's name and number of accounts
+        optionLabel.setText("Name: " + user.getName() + " | Number Of Accounts: " + user.getNumberOfAccounts());
     }
 
     public void refresh()
     {
-        // get option label
+        // refresh option label
         refreshOptionLabel();
+        // repack main frame
         packMainFrame();
     }
 
     public void addAccount(String website, String username, String password)
     {
+        // add an account to this user according to the specified values
         user.addAccount(website, username, password);
     }
 
     public int getHeight(JPanel panel)
     {
+        // get the height of the specified panel
         return(int) panel.getPreferredSize().getHeight();
     }
 
     public JPanel getAccountPanel(Account acc)
     {
+        // initialize account JPanel
         account = new JPanel();
+        // set the layout manager to FlowLayout
         account.setLayout(new FlowLayout());
+        // center and display the account image
         JLabel image = new JLabel(acc.getIcon(), JLabel.CENTER);
-        JLabel[] array = new JLabel[3];
-        JPanel text = new JPanel();
         // default dimensions
         account.setPreferredSize(new Dimension(150, 150));
-        image.setBackground(ACCOUNT_BACKGROUND);
         account.add(image);
-
+        JLabel[] array = new JLabel[3];
         for(int i = 0; i < array.length; i++)
         {
             // display in order webite, username and password
@@ -298,37 +269,34 @@ public class Interface implements ActionListener
             array[i].setHorizontalAlignment(JLabel.CENTER);
             account.add(array[i]);
         }
+        // set background color
+        image.setBackground(ACCOUNT_BACKGROUND);
         account.setBackground(ACCOUNT_BACKGROUND);
         // check whether width exceeds the default width, if not, the default dimensions remains
         account.setPreferredSize(new Dimension(acc.getWidth(), 150));
         return account;
     }
 
+    // get the JLabels for the specified account in the form of an array
     public JLabel[] getLabels(Account acc)
     {
-        JLabel image = new JLabel(acc.getIcon(), JLabel.CENTER);
         JLabel[] array = new JLabel[3];
         for(int i = 0; i < array.length; i++)
         {
             // display in order webite, username and password
             array[i] = new JLabel(HEADERS[i] + acc.getAcc(i));
-            int width =(int) array[i].getPreferredSize().getWidth();
-            if(width > 150)
-            {
-                account.setPreferredSize(new Dimension(width + 2, 150));
-                image.setPreferredSize(new Dimension(width, 75));
-            }
-            account.add(array[i]);
         }
+        // return array of labels
         return array;
     }
 
-    public JPanel displayAccounts()
+    public JPanel returnAccountsPanel()
     {
         accounts = new JPanel();
         accounts.setBackground(BACKGROUND_COLOR);
         for(int i = 0; i < user.getNumberOfAccounts(); i++)
         {
+            // add the individual account panels for each of the user's accounts to the collective "accounts" JPanel
             accounts.add(getAccountPanel(user.getAccount(i)));
         }
         return accounts;
@@ -339,18 +307,17 @@ public class Interface implements ActionListener
         refreshOptionLabel();
         if(user.getNumberOfAccounts() == 0)
         {
+            // if the user has no accounts
             frame.add(noAccounts());
         }
         else
         {
-            frame.add(displayAccounts(), BorderLayout.CENTER);
+            // add and center the accounts panel to the main frame
+            frame.add(returnAccountsPanel(), BorderLayout.CENTER);
         }
-
-        // set up the jframe, then display it
+        // set up the jframe to the specified dimensions, then display it
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        frame.setPreferredSize(new Dimension(1000, 800));
-
+        frame.setPreferredSize(new Dimension(1000, 863));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -358,6 +325,7 @@ public class Interface implements ActionListener
 
     public JPanel noAccounts()
     {
+        // the homepage for users who do not currently have any accounts; acts as a start gudie
         JPanel empty = new JPanel();
         JLabel n = new JLabel("Welcome, " + user.getName() + "!");
         n.setPreferredSize(new Dimension(800, 100));
@@ -380,27 +348,16 @@ public class Interface implements ActionListener
         return empty;
     }
 
-    public void pack(JFrame jframe)
-    {
-        jframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        jframe.pack();
-        jframe.setLocationRelativeTo(null);
-        jframe.setVisible(true);
-    }
-
     public void actionPerformed(ActionEvent e)
     {
-        //...Get information from the action event...
-        //...Display it in the text area...
-
+        // if the specified buttons/actions are activated, followed by the conduct of the application accordingly
         if(e.getSource() == addAccount || e.getSource() == add)
         {
-
+            // setting up input panel for option pane
+            JPanel myPanel = new JPanel();
             JTextField websiteField = new JTextField(10);
             JTextField usernameField = new JTextField(10);
-            JTextField password = new JTextField(10);
-
-            JPanel myPanel = new JPanel();
+            JTextField passwordField = new JTextField(10);
             myPanel.add(new JLabel("Website:"));
             myPanel.add(websiteField);
             myPanel.add(Box.createHorizontalStrut(15)); // a spacer
@@ -408,13 +365,32 @@ public class Interface implements ActionListener
             myPanel.add(usernameField);
             myPanel.add(Box.createHorizontalStrut(15)); // a spacer
             myPanel.add(new JLabel("Password:"));
-            myPanel.add(password);
-
-            int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
-            if(result == JOptionPane.OK_OPTION)
+            myPanel.add(passwordField);
+            boolean isEmpty = true;
+            while(isEmpty)
             {
-                addAccount(websiteField.getText(), usernameField.getText(), password.getText());
-                refresh();
+                // prompt user for input
+                int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter the Account Information Below:", JOptionPane.OK_CANCEL_OPTION);
+                if(result == JOptionPane.OK_OPTION)
+                {
+                    if(!websiteField.getText().equals ("") || !usernameField.getText().equals (""))
+                    {
+                        if(!passwordField.getText().equals(""))
+                        {
+                            // if the fields are not empty
+                            // add an account with the specified values
+                            user.addAccount(websiteField.getText(), usernameField.getText(), passwordField.getText());
+                            isEmpty = false;
+                            refresh();
+                        }
+                        else
+                            JOptionPane.showMessageDialog(frame, "Sorry, there was no input received for one or more of the required areas. Please try again.");
+                    }
+                    else
+                        JOptionPane.showMessageDialog(frame, "Sorry, there was no input received for one or more of the required areas. Please try again.");
+                }
+                else if(result == JOptionPane.CANCEL_OPTION || result == -1)
+                    isEmpty = false;
             }
         }
         else if(e.getSource() == btnSave)
@@ -455,40 +431,53 @@ public class Interface implements ActionListener
         }
         else if(e.getSource() == sortByUsernameButton)
         {
+            // sort accounts by username
             user.sortByUsername();
             refresh();
         }
         else if(e.getSource() == sortByPasswordButton)
         {
+            // sort accounts by password
             user.sortByPassword();
             refresh();
         }
         else if(e.getSource() == refreshButton)
         {
-            // refresh
+            // refresh the main display
             refresh();
         }
         else if(e.getSource() == backButton)
         {
-            // close edit frame
+            // close editing frame
             editFrame.dispose();
         }
         else if(e.getSource() == lock)
         {
-            // lock application with password
+            // lock application with user password
             if(user.getPassword().equals(""))
             {
                 // no password set
                 JOptionPane.showMessageDialog(frame, "Please add a password first before you lock.");
                 String password = JOptionPane.showInputDialog(frame, "Set Password");
-                user.changePassword(password);
+                if(password == null || password.equals("") )
+                {
+                    password = "";
+                    JOptionPane.showMessageDialog(frame,
+                        "A password has not been entered. You can set your password in the Settings option.");
+                }
+                else
+                {
+                    user.changePassword(password);
+                }
                 refresh();
             }
             else
             {
+                // hide settings and main frame
                 settings.dispose();
-                frame.setVisible(false);
-                Login l = new Login();
+                frame.dispose();
+                // initiaze login frame
+                Login l = new Login();                
             }
         }
         else if(e.getSource() == changePassword)
@@ -498,7 +487,16 @@ public class Interface implements ActionListener
             {
                 JOptionPane.showMessageDialog(frame, "Please add a password first :))");
                 String password = JOptionPane.showInputDialog(frame, "Set Password");
-                user.changePassword(password);
+                if(password == null || password.equals("") )
+                {
+                    password = "";
+                    JOptionPane.showMessageDialog(frame,
+                        "A password has not been entered. You can set your password in the Settings option.");
+                }
+                else
+                {
+                    user.changePassword(password);
+                }
                 refresh();
             }
             // ask for password confirmation before changing
@@ -506,30 +504,45 @@ public class Interface implements ActionListener
             {
                 JOptionPane.showMessageDialog(frame, "Please confirm your password first :))");
                 settings.dispose();
-                frame.setVisible(false);
+                frame.dispose();
                 Login l = new Login();
                 l.needPasswordChange();
             }
         }
         else if(e.getSource() == undo || e.getSource() == undoButton)
         {
-            user.undo();
+            // undo delete and refresh
+            if(!user.undo())
+            {
+                JOptionPane.showMessageDialog(frame, "No account has been deleted or the previous accounts has already been restored.");
+            }
             refresh();
         }
 
         else if(e.getSource() == changeName)
         {
-            String name = JOptionPane.showInputDialog(frame, "Enter Name");
-            user.changeName(name);
+            // prompt user for input
+            String name = JOptionPane.showInputDialog(frame, "Please Enter Your Name:");
+            // change user name to modified value and refresh
+
+            if(name == null || name.equals("") )
+            {
+                name = "Unnamed User";
+                JOptionPane.showMessageDialog(frame,
+                    "A name has not been entered. You can change your name in the Settings option.");
+            }
+            else
+                user.changeName(name);
             refresh();
         }
         else if(e.getSource() == editAccount || e.getSource() == editMenuButton)
         {
+            // display the editing frame
             addEditFrame();
         }
         else if(e.getSource() == helpButton)
         {
-            //custom title, information icon
+            // display the help information
             JOptionPane.showMessageDialog(frame,
                 HELP_INFO,
                 "Helpful Information",
@@ -540,24 +553,26 @@ public class Interface implements ActionListener
             // create settings frame
             settings = new JFrame("Settings");
             settings.setLayout(new FlowLayout());
-
-            JLabel settingLabel = new JLabel("\u2699 Settings");
-            settingLabel.setFont(new Font("Serif", Font.BOLD, 30));
-
-            helpButton = new JButton("Help");
-            
-            helpButton.addActionListener(this);
-
+            // initialize settings panel
             JPanel settingsPanel = new JPanel();
             settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
 
-            settingsPanel.add(new JLabel(" "));
+            // add the specified labels to the panel
+            JLabel settingLabel = new JLabel("\u2699 Settings");
+            settingLabel.setFont(new Font("Serif", Font.BOLD, 30));
             settingsPanel.add(settingLabel);
-            settingsPanel.add(helpButton);
             settingsPanel.add(new JLabel(" "));
-            JLabel userMenu = new JLabel("User");
 
-            settingsPanel.add(userMenu);
+            // add the specified JButtons to the panel
+            helpButton = new JButton("Help");
+            settingsPanel.add(helpButton);
+            // add actionListener
+            helpButton.addActionListener(this);
+
+            // repeat for further labels and buttons
+
+            settingsPanel.add(new JLabel(" "));
+            settingsPanel.add(new JLabel("User"));
             settingsPanel.add(new JLabel(" "));
             changeName = new JButton("Change Name");
             changeName.addActionListener(this);
@@ -572,8 +587,7 @@ public class Interface implements ActionListener
             settingsPanel.add(lock);
 
             settingsPanel.add(new JLabel(" "));
-            JLabel menu = new JLabel("Files");
-            settingsPanel.add(menu);
+            settingsPanel.add(new JLabel("Files"));
             settingsPanel.add(new JLabel(" "));
 
             btnSave = new JButton("Save As");
@@ -584,16 +598,20 @@ public class Interface implements ActionListener
             btnOpen.addActionListener(this);
             settingsPanel.add(btnOpen);
 
+            sampleButton = new JButton("Import Sample Accounts");
+            sampleButton.addActionListener(this);
+            settingsPanel.add(sampleButton);
+
             settingsPanel.add(new JLabel(" "));
-            JLabel accounts = new JLabel("Accounts");
-            settingsPanel.add(accounts);
+            settingsPanel.add(new JLabel("Accounts"));
             settingsPanel.add(new JLabel(" "));
-            // get add account button
+
+            // add account button
             add = new JButton("Add Account");
             add.addActionListener(this);
             settingsPanel.add(add);
 
-            // get edit account button
+            // edit account button
             editAccount = new JButton("Edit Accounts");
             editAccount.addActionListener(this);
             settingsPanel.add(editAccount);
@@ -604,32 +622,38 @@ public class Interface implements ActionListener
             settingsPanel.add(undoButton);
 
             settingsPanel.add(new JLabel(" "));
-            JLabel lb = new JLabel("Sorting");
-            settingsPanel.add(lb);
+            settingsPanel.add(new JLabel("Sorting"));
             settingsPanel.add(new JLabel(" "));
 
             sortByWebsiteButton = new JButton("By Website");
-            sortByWebsiteButton.addActionListener(this);
             sortByUsernameButton = new JButton("By Username");
-            sortByUsernameButton.addActionListener(this);
             sortByPasswordButton = new JButton("By Password");
+
+            sortByWebsiteButton.addActionListener(this);
+            sortByUsernameButton.addActionListener(this);
             sortByPasswordButton.addActionListener(this);
 
             settingsPanel.add(sortByWebsiteButton);
             settingsPanel.add(sortByUsernameButton);
             settingsPanel.add(sortByPasswordButton);
             settings.add(settingsPanel);
-
             settingsPanel.add(new JLabel(" "));
 
             int result = JOptionPane.showConfirmDialog(settings, settingsPanel, "Setting Options", JOptionPane.DEFAULT_OPTION);
             if(result == JOptionPane.OK_OPTION)
             {
+                // refresh the display when user finishes with the settings frame
                 refresh();
             }
         }
+        if(e.getSource() == sampleButton)
+        {
+            user.initializeTestUser();
+            refresh();
+        }
         else if(e.getSource() == quitProgram)
         {
+            // intiate quit method
             quit();
         }
     }
@@ -650,12 +674,11 @@ public class Interface implements ActionListener
         button.add(i);
 
         // display the rest of the user info
-
         button.add(getLabels(acc)[0]);
         button.add(getLabels(acc)[1]);
         button.add(getLabels(acc)[2]);
+        // add panel with edit and delete button
         JPanel b = new JPanel();
-
         b.add(edit);
         b.add(deleteButton);
         button.add(b);
@@ -665,6 +688,7 @@ public class Interface implements ActionListener
                 {
                     if(e.getSource() == deleteButton)
                     {
+                        // if delete button is clicked for this account, remove the account and refresh the edit frame
                         user.removeAccount(user.getAccounts().indexOf(acc));
                         addEditFrame();
                     }
@@ -677,6 +701,8 @@ public class Interface implements ActionListener
                 {
                     if(e.getSource() == edit)
                     {
+                        // if edit button is clicked for this account, 
+                        // modify the account with the specified values and refresh the edit frame
                         JTextField websiteField = new JTextField(10);
                         websiteField.setText(acc.getWebsite());
                         JTextField usernameField = new JTextField(10);
@@ -692,11 +718,32 @@ public class Interface implements ActionListener
                         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
                         myPanel.add(new JLabel("Password:"));
                         myPanel.add(passwordField);
-                        int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
-                        if(result == JOptionPane.OK_OPTION)
+                        boolean isEmpty = true;
+                        while(isEmpty)
                         {
-                            acc.editAccount(websiteField.getText(), usernameField.getText(), passwordField.getText());
-                            addEditFrame();
+                            // prompt user for input
+                            int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter the Changed Account Information Below:", JOptionPane.OK_CANCEL_OPTION);
+                            if(result == JOptionPane.OK_OPTION)
+                            {
+                                if(!websiteField.getText().equals ("") || !usernameField.getText().equals (""))
+                                {
+                                    if(!passwordField.getText().equals(""))
+                                    {
+                                        // if the fields are not empty
+                                        // edit this account with the specified values
+                                        acc.editAccount(websiteField.getText(), usernameField.getText(), passwordField.getText());
+                                        isEmpty = false;
+                                        refresh();
+                                        addEditFrame();
+                                    }
+                                    else
+                                        JOptionPane.showMessageDialog(frame, "Sorry, there was no input received for one or more of the required areas. Please try again.");
+                                }
+                                else
+                                    JOptionPane.showMessageDialog(frame, "Sorry, there was no input received for one or more of the required areas. Please try again.");
+                            }
+                            else if(result == JOptionPane.CANCEL_OPTION || result == -1)
+                                isEmpty = false;
                         }
                     }
                 }
@@ -730,21 +777,22 @@ public class Interface implements ActionListener
         {
             if(!user.undo())
             {
-                JOptionPane.showMessageDialog(frame, "No account has been deleted or the previous account has already been restored.");
+                JOptionPane.showMessageDialog(frame, "No account has been deleted or the previous accounts has already been restored.");
             }
-            else
-            {
-                refresh();
-            }
+            refresh();
             addEditFrame();
         }
-
+        else
+        {
+            refresh();
+        }
     }
 
     public void quit()
     {
         Object[] options = {"Yes, but I would like to save.", "Yes, without saving", "No"};
-        int n = JOptionPane.showOptionDialog(frame, "Are You Sure?", "Quit Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+        int n = JOptionPane.showOptionDialog(frame, "Are You Sure?", "Quit Confirmation", 
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         switch(n)
         {
             // Yes with Saving Password
@@ -765,7 +813,7 @@ public class Interface implements ActionListener
             break;
             // Yes, without Saving
             case 1:
-            JOptionPane.showMessageDialog(frame, "Goodbye :))");
+            JOptionPane.showMessageDialog(frame, "Goodbye. :)");
             System.exit(0);
             break;
             // No, go back
@@ -866,21 +914,32 @@ public class Interface implements ActionListener
                 if(nameTextField.getText().equals(user.getPassword()))
                 {
                     frame.setVisible(false);
-                    JOptionPane.showMessageDialog(frame, "Welcome Back " + user.getName() + " :))");
-
-                    refresh();
+                    displayJFrame();
                     if(change == true)
                     {
                         String password = JOptionPane.showInputDialog(frame, "Enter Changed Password");
-                        user.changePassword(password);
-                        change = false;
+                        if(password == null || password.equals("") )
+                        {
+                            JOptionPane.showMessageDialog(frame,
+                                "A password has not been entered. You can set your password in the Settings option.");
+                        }
+                        else
+                        {
+                            user.changePassword(password);
+                            change = false;
+                            JOptionPane.showMessageDialog(frame, "Password Successfully Changed! :)");
+                        }
+
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(frame, "Welcome Back " + user.getName() + "! :)");
                     }
                 }
                 else
                 {
                     JOptionPane.showMessageDialog(frame, "Wrong Password. Please Try Again.");
                 }
-
             }
         }
 

@@ -1,18 +1,18 @@
 
 /**
- * Write a description of class Profile here.
+ * This a profile that knows its website, username and password.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author William Wang
+ * @version 2.0
  */
 public class Profile
 {
-    // instance variables - replace the example below with your own
+        final String[] HEADERS = {"Website: ","Username: ","Password: "};
+    // instance variables
     private String website;
     private String username;
     private String password;
     
-
     /**
      * Constructor for objects of class Profile
      */
@@ -32,62 +32,41 @@ public class Profile
         this.website = website;
     }
     
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
+    public String getWebsite()
+    {
+        // return this account's website
+        return this.website;
+    }
+    
     public String getUsername()
     {
-        // return this username
+        // return this account's username
         return this.username;
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
     public String getPassword()
     {
-        // return this username
+        // return this account's password
         return this.password;
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public String getWebsite()
-    {
-        // return this username
-        return this.website;
     }
 
     public String toString()
     {
+        // converts the account information into a string
         return website + ", " + username + ", " + password;
     }
 
     public String toPrint()
     {
+        // converts the account information to a printable format
         String n = System.getProperty("line.separator");
-        String print = "Website: " + website + n + "Username: " + username + n + "Password: " + password;
+        String print = "Website: " + website + n + "Username: " + username + n + "Password: " + password + n + n;
         return print;
-    }
-
-    public void display()
-    {
-        // return this username
-        //Display display = new Display;
     }
 
     public void editAccount(String website, String username, String password)
     {
+        // edit the account information to the modified values
         this.website = website;
         this.username = username;
         this.password = password;
@@ -95,6 +74,7 @@ public class Profile
 
     public String getAcc(int index)
     {
+        // return the specified value of the account according to the index provided.
         switch(index)
         {
             case 0:
@@ -109,6 +89,7 @@ public class Profile
             default:
             break;
         }
+        // return the website value by default
         return website;
     }
 

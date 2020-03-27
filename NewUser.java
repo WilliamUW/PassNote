@@ -34,8 +34,8 @@ public class NewUser implements ActionListener
         frame.getContentPane().setLayout(new FlowLayout());
         panel = new JPanel(new GridLayout(2,1));
         img = new JLabel();
-        
-        ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + File.separator + "Icons\\newUserLogin.png");
+        // if image is valid
+        ImageIcon icon = new ImageIcon("Icons/newUserLogin.png");
 
         Image image = icon.getImage(); // transform it
         Image newimg = image.getScaledInstance(700, 700,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -48,12 +48,11 @@ public class NewUser implements ActionListener
         nameTextField = new JTextField("");
         nameTextField.setFont(new Font("Serif", Font.PLAIN, 20));
         nameTextField.addActionListener(this);
-        
+
         welcome = new JLabel("Welcome!");
         welcome.setHorizontalAlignment(JLabel.CENTER);
         welcome.setFont(new Font("Serif", Font.PLAIN, 20));
-        
-        
+
         start = new JButton("Start!");
         start.setFont(new Font("Serif", Font.PLAIN, 40));
         start.addActionListener(this);
@@ -79,19 +78,38 @@ public class NewUser implements ActionListener
         if(e.getSource() == start)
         {
             JFrame f = new JFrame();
-            String name=JOptionPane.showInputDialog(f,"Enter Name");  
+            String name = "";
+            boolean isDone = false;
             frame.setVisible(false);
-             JOptionPane.showMessageDialog(frame,
-                    name + ", Welcome to Passnote!");
-            if(name.equals(""))
+            while (!isDone)
             {
-                name = "Unnamed User";
+                name=JOptionPane.showInputDialog(f,"Enter Name");  
+                if(name == null)
+                {
+                    f.dispose();
+                    frame.setVisible(true);
+                    isDone = true;
+                }
+                else if(name.equals(""))
+                {
+                    name = "Unnamed User";
+                    JOptionPane.showMessageDialog(frame,
+                        "A name has not been entered. You can change your name in the Settings option.");
+                    isDone = true;
+                    JOptionPane.showMessageDialog(frame,
+                        name + ", Welcome to Passnote!");
+                    i = new Interface(name);
+                }
+                else if(name != null)
+                {
+                    isDone = true;
+                    JOptionPane.showMessageDialog(frame,
+                        name + ", Welcome to Passnote!");
+                    i = new Interface(name);
+                }
             }
-            i = new Interface(name);
+
         }
     }
 
-
-
 }
-

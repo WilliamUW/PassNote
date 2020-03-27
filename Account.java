@@ -7,15 +7,14 @@ import java.io.File;
 import java.net.URL;
 import java.io.*;
 /**
- * Write a description of class Account here.
+ * This is Account that stores the values from the Profile class as well as an icon.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author William Wang
+ * @version 2.1
  */
 public class Account extends Profile
 {
-    final String[] HEADERS = {"Website: ","Username: ","Password: "};
-    // instance variables - replace the example below with your own
+    // instance variables
     private ImageIcon icon;
     private int width;
 
@@ -27,42 +26,46 @@ public class Account extends Profile
         // initialise instance variables
         super();
         // use the default image
-        icon = new ImageIcon("Icons/account.png");
-        icon = scaleImage(icon);
+        this.icon = autoIcon();
+        width = 150;
+        testWidth();
     }
 
     public Account(String website, String username, String password)
     {
+        // initialise instance variables according to specified data
         super(website, username, password);
         this.icon = autoIcon();
         width = 150;
+        testWidth();
     }
 
     public ImageIcon autoIcon()
     {
-        // get website name
-        String[] sp = this.getWebsite().split("[.]c");
+        // split website value to get website name
+        String[] arr = this.getWebsite().split("[.]");
         // set location of image to website name
-        String location = "Icons/" + sp[0] + ".png";
-        // if image is valid else use default icon
-        icon = ifImageExists(new ImageIcon(location));
-        // scale icon to gui size
-        icon = scaleImage(icon);
+        for(int i = 0; i < arr.length; i++)
+        {
+            String location = "Icons/" + arr[i] + ".png";
+            // if image is valid, else use default icon
+            icon = new ImageIcon(location);
+            if(icon.getIconWidth() < 0 || icon.getIconHeight() < 0)
+            {
+                // if no icon exists, use the default image
+            }
+            else
+            {
+                // if icon exists, scale and return the icon
+                icon = scaleImage(icon);
+                return icon;
+            }
+        }
+        // no personalized image exists, scale default icon and return
+        icon = scaleImage(new ImageIcon("Icons/account.png"));
         return icon;
     }
 
-    public ImageIcon ifImageExists(ImageIcon icon)
-    {
-        if(icon.getIconWidth() < 0 || icon.getIconHeight() < 0)
-        {
-            // use the default image
-            return new ImageIcon("Icons/account.png");
-        }
-        else
-        {
-            return icon;
-        }
-    }
 
     public ImageIcon scaleImage(ImageIcon icon)
     {
@@ -83,14 +86,16 @@ public class Account extends Profile
 
     public void setIcon(ImageIcon icon)
     {
+        // sets the icon
         this.icon = icon;
     }
 
     public ImageIcon getIcon()
     {
+        // returns the icon
         return this.icon;
     }
-    
+
     // test for whether the width of the panel has changed
     public void testWidth()
     {
@@ -104,6 +109,7 @@ public class Account extends Profile
             // greater than previous width
             if(w > width)
             {
+                // change width to greatest value
                 this.width = w;
             }
         }
@@ -111,6 +117,7 @@ public class Account extends Profile
 
     public int getWidth()
     {
+        // return the width
         return width;
     }
 }

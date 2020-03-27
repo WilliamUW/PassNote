@@ -8,7 +8,7 @@ import java.net.URL;
 import java.io.*;
 import javax.swing.border.*;
 /**
- * Us
+ * User of the Password Manager application
  *
  * @author William Wang
  * @version (a version number or a date)
@@ -20,6 +20,8 @@ public class User
     private ArrayList<Account> accounts = new ArrayList<Account>();
     private Account lastRemoved;
     private int lastRemovedIndex;
+    private Stack<Account> lastAccountRemoved = new Stack<Account>();
+    private Stack<Integer> lastRemovedAccountIndex = new Stack<Integer>();
     private String password;
     private JFrame frame;
     private JTextField inputTextField;
@@ -35,7 +37,7 @@ public class User
     public User()
     {
         // initialise instance variables
-        this.name = "unnamed user";
+        this.name = "";
         this.password = "";
     }
 
@@ -56,7 +58,6 @@ public class User
      */
     public String getName()
     {
-        // put your code here
         return this.name;
     }
 
@@ -67,7 +68,7 @@ public class User
      */
     public void addAccount(String website, String username, String password)
     {
-        // put your code here
+        // adds an account with the specified values
         Account account = new Account(website, username, password);
         accounts.add(account);
     }
@@ -118,10 +119,15 @@ public class User
 
     public void initializeTestUser()
     {
-        String[] websites =  {"facebook.com","drive.google.com","instagram.com","gmail.com","dropbox","microsoft","facebook","drive.google","instagram","gmail","dropbox","microsoft"};
-        for(int i = 0; i < websites.length; i++)
+        String[][] sampleInfo = 
+            {
+                {"facebook.com","drive.google.com","instagram.com","gmail.com","outlook.com","twitter.com","dropbox.com","micr"},
+                {"gmail","dropbox","microsoft","facebook.com","drive.google.com","instagram.com","gmail.com","dropbox"},
+                {"drive.google","instagram","gmail","dropbox","microsoft","facebook.com","drive.google","instagram.com"}
+            };
+        for(int i = 0; i < sampleInfo[0].length; i++)
         {
-            addAccount(websites[i],"username","password");
+            addAccount(sampleInfo[0][i],sampleInfo[1][i],sampleInfo[2][i]);
         }
     }
 
@@ -132,65 +138,69 @@ public class User
 
     public void removeAccount(int index)
     {
+        // save then remove an account according to its index
         saveUndo(accounts.get(index));
         accounts.remove(index);
     }
 
     public void removeAccount(Account account)
     {
+        // save then remove the specified account
         saveUndo(account);
         accounts.remove(account);
     }
 
     public ArrayList<Account> getAccounts()
     {
+        // return arraylist of all accounts for this user
         return accounts;
     }
 
     public void saveUndo(Account account)
     {
-        lastRemoved = account;
-        lastRemovedIndex = accounts.indexOf(account);
+        // save account and its index to stack
+        lastAccountRemoved.push(account);
+        lastRemovedAccountIndex.push(accounts.indexOf(account));
     }
 
     public boolean undo()
     {
-    // last removed account exists 
-        if(lastRemoved != null)
+        if(!lastAccountRemoved.isEmpty())
         {
-            accounts.add(lastRemovedIndex, lastRemoved);
+            // last removed account exists 
+            accounts.add(lastRemovedAccountIndex.pop(), lastAccountRemoved.pop());
             lastRemovedIndex = -1 ;
             lastRemoved = null;
             return true;
         }
         else
         {
-        // no previous account deleted
+            // no previous account deleted
             return false;
         }
     }
 
     public void sortByWebsite()
     {
-    // convert ArrayList into List of accounts
+        // convert ArrayList into List of accounts
         List<Account> accountsList = accounts;
-    
-    // sort with specified Comparator
+
+        // sort with specified Comparator
         Collections.sort(accountsList, new Comparator<Account>()
-        {
+            {
                 public int compare(Account o1, Account o2)
                 {
+                    // compare between two accounts' website lexicographically
                     return o1.getWebsite().compareTo(o2.getWebsite());
                 }
             });
         // reset ArrayList of user accounts 
         accounts = new ArrayList<Account>();
-    // insert the sorted accounts in order
+        // insert the alphabetically sorted accounts in order
         for(int i =0; i < accountsList.size(); i++)
             accounts.add(accountsList.get(i));
-            
     }
-    
+
     public void sortByUsername()
     {
         List<Account> accountsList = accounts;
@@ -202,13 +212,13 @@ public class User
                     return o1.getUsername().compareTo(o2.getUsername());
                 }
             });
-            
+
         accounts = new ArrayList<Account>();
         for(int i =0; i < accountsList.size(); i++)
             accounts.add(accountsList.get(i));
-            
+
     }
-    
+
     public void sortByPassword()
     {
         List<Account> accountsList = accounts;
@@ -220,11 +230,11 @@ public class User
                     return o1.getPassword().compareTo(o2.getPassword());
                 }
             });
-            
+
         accounts = new ArrayList<Account>();
         for(int i =0; i < accountsList.size(); i++)
             accounts.add(accountsList.get(i));
-            
+
     }
 
     public boolean isVisible()
