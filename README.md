@@ -5,6 +5,6 @@ Made in Java 8 using the Java Swing API.
 Video Documentation Link(YouTube) for my IB Hl CS Internal Assessment:
 https://www.youtube.com/watch?v=j7zT3ZyTzqE
 
-Date: Dec 27th 2020
+Submission Date: Dec 27th 2020
 
 Coded by William Wang
